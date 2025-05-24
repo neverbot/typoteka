@@ -152,11 +152,9 @@ cp viewer/pagedjs/*.{js,html,css} "$BUILD_DIR/viewer/"
 cp -R viewer/fonts "$BUILD_DIR/viewer/"
 echo -e "\rinfo: copying viewer files                            ok"
 
-# Copy only required style files (exclude pandoc fixes)
+# Copy all styles directory content
 echo -n "info: copying style files..."
-mkdir -p "$BUILD_DIR/styles/fixes/pagedjs"
-cp "$STYLES_DIR"/*.css "$BUILD_DIR/styles/"
-cp "$STYLES_DIR/fixes/pagedjs/"*.js "$BUILD_DIR/styles/fixes/pagedjs/"
+cp -R "$STYLES_DIR/." "$BUILD_DIR/styles/"
 echo -e "\rinfo: copying style files                             ok"
 
 # Copy assets based on patterns, preserving directory structure
