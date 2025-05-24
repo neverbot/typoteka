@@ -14,7 +14,7 @@ class RemoveSpanInH1Handler extends Paged.Handler {
     if (node.nodeName === 'H1') {
       if (node.children.length > 0) {
         node.children[0].remove()
-        console.log(node)
+        // console.log(node)
       }
     }
   }

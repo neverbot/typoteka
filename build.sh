@@ -94,8 +94,9 @@ while read -r filter; do
             exit 1
         fi
         PANDOC_FILTERS="$PANDOC_FILTERS --lua-filter=$FILTER_PATH"
-        [ -n "$PANDOC_FILTERS_DISPLAY" ] && PANDOC_FILTERS_DISPLAY="$PANDOC_FILTERS_DISPLAY\n"
-        PANDOC_FILTERS_DISPLAY="$PANDOC_FILTERS_DISPLAY$(basename "$filter")"
+        # Add newline only if not the first item
+        [ -n "$PANDOC_FILTERS_DISPLAY" ] && PANDOC_FILTERS_DISPLAY+=$'\n'
+        PANDOC_FILTERS_DISPLAY+="$(basename "$filter")"
     fi
 done < <(jq -r '.styles.fixes.pandoc[] // empty' "$CONFIG_FILE")
 
@@ -110,8 +111,9 @@ while read -r script; do
             exit 1
         fi
         PAGEDJS_SCRIPTS="$PAGEDJS_SCRIPTS $SCRIPT_PATH"
-        [ -n "$PAGEDJS_SCRIPTS_DISPLAY" ] && PAGEDJS_SCRIPTS_DISPLAY="$PAGEDJS_SCRIPTS_DISPLAY\n"
-        PAGEDJS_SCRIPTS_DISPLAY="$PAGEDJS_SCRIPTS_DISPLAY$(basename "$script")"
+        # Add newline only if not the first item
+        [ -n "$PAGEDJS_SCRIPTS_DISPLAY" ] && PAGEDJS_SCRIPTS_DISPLAY+=$'\n'
+        PAGEDJS_SCRIPTS_DISPLAY+="$(basename "$script")"
     fi
 done < <(jq -r '.styles.fixes.pagedjs[] // empty' "$CONFIG_FILE")
 

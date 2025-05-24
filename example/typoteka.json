@@ -13,7 +13,8 @@
     "path": "../styles/example",
     "fixes": {
       "pandoc": [
-        "fixes/pandoc/filter-html-auto-table-column-widths.lua"
+        "fixes/pandoc/filter-html-auto-table-column-widths.lua",
+        "fixes/pandoc/strip-img-paragraphs.lua"
       ],
       "pagedjs": [
         "fixes/pagedjs/handlers.js"
