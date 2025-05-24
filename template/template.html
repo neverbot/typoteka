@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <title>Book template Paged.js</title>
+
+    <!-- Paged.js-->
+    <script src="./styles/test/pagedjs/paged.js"></script>
+    <script src="./styles/test/pagedjs/interface.js"></script>
+    <script src="./styles/test/pagedjs/reload-in-place.js"></script>
+    <script src="./styles/test/pagedjs/handlers.js"></script>
+    <script src="./styles/test/paged-scripts.js"></script>
+
+    <link rel="stylesheet" type="text/css"
+      href="./styles/test/pagedjs/interface-header.css" />
+    <link rel="stylesheet" type="text/css"
+      href="./styles/test/pagedjs/interface.css" />
+
+    <!-- Fonts -->
+    <link rel="stylesheet" href="./styles/test/fonts/VG5000/stylesheet.css">
+
+  </head>
+  <body class="interface-bar-bottom">
+
+    <header id="interface-header"
+      w3-include-html="./styles/test/pagedjs/interface.html"></header>
+    <div id="render-book"></div>
+
+    <template id="book-content">
+
+      <!-- Content of your book -->
+      %^CONTENT%^
+
+    </template>
+
+  </body>
+</html>

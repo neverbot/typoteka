@@ -1,0 +1,3 @@
+[submodule "lib/pagedjs"]
+	path = lib/pagedjs
+	url = https://github.com/pagedjs/pagedjs.git

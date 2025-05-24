@@ -1,0 +1,23 @@
+{
+  "title": "Frankenstein",
+  "language": "en-GB",
+  "files": {
+    "content": [
+      "frankenstein.md"
+    ],
+    "assets": [
+      "images/*"
+    ]
+  },
+  "styles": {
+    "path": "../styles/test",
+    "fixes": {
+      "pandoc": [
+        "fixes/pandoc/filter-html-auto-table-column-widths.lua"
+      ],
+      "pagedjs": [
+        "fixes/pagedjs/handlers.js"
+      ]
+    }
+  }
+}
