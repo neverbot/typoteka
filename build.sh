@@ -159,12 +159,18 @@ cp "$STYLES_DIR"/*.css "$BUILD_DIR/styles/"
 cp "$STYLES_DIR/fixes/pagedjs/"*.js "$BUILD_DIR/styles/fixes/pagedjs/"
 echo -e "\rinfo: copying style files                             ok"
 
-# Copy assets based on patterns
+# Copy assets based on patterns, preserving directory structure
 echo -n "info: copying asset files..."
 for pattern in $ASSET_PATTERNS; do
     for asset in "$CONTENT_DIR"/$pattern; do
         if [ -e "$asset" ]; then
-            cp -R "$asset" "$BUILD_DIR/"
+            # Get the relative path from content directory
+            rel_path=${asset#$CONTENT_DIR/}
+            # Create the target directory
+            target_dir="$BUILD_DIR/$(dirname "$rel_path")"
+            mkdir -p "$target_dir"
+            # Copy the file preserving the structure
+            cp -R "$asset" "$target_dir/"
         fi
     done
 done
