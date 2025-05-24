@@ -35,8 +35,7 @@ A simple stylesheet to see pages on screen (with baseline included) */
     width: calc(var(--pagedjs-width) * 2);
     flex: 0;
     flex-wrap: wrap;
-    margin: 0 auto;
-    margin-top: var(--pagedjs-header-height);
+    margin: var(--pagedjs-header-height) auto;
   }
 
   .pagedjs_page {

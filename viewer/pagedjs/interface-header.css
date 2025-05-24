@@ -316,7 +316,7 @@ form {
 
 #button-print {
   width: 60px;
-  opacity: 0.2;
+  /* opacity: 0.2; */
   background: none;
   outline: none;
 }
@@ -325,6 +325,7 @@ form {
   fill: var(--color-interface-header);
   width: 25px;
   height: 25px;
+  opacity: 0.8; /* this icon is too dark */
 }
 
 #label-preview-toggle svg {

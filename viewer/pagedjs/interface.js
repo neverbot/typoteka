@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   let flowBook = document.querySelector("#book-content");
   let book_content = flowBook.content;
   let paged = new Paged.Previewer();
-  paged.preview(book_content, ["styles/test/style.css"], document.querySelector("#renderbook")).then((flow) => {
+  paged.preview(book_content, ["styles/styles.css"], document.querySelector("#renderbook")).then((flow) => {
 
   });
 });
