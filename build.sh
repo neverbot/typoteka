@@ -218,15 +218,12 @@ done
 PREVIEW_HTML="${TEMPLATE_FILE//%^HANDLERS%^/$HANDLER_SCRIPTS}"
 PREVIEW_HTML="${PREVIEW_HTML//%^CONTENT%^/$BODY}"
 printf '%s\n' "$PREVIEW_HTML" > "$BUILD_DIR/preview.html"
-
-# Copy preview-specific assets
-mkdir -p "$BUILD_DIR/styles/fixes/pagedjs"
-cp "$STYLES_DIR/styles.css" "$BUILD_DIR/styles/"
-cp "$STYLES_DIR/fixes/pagedjs/"*.js "$BUILD_DIR/styles/fixes/pagedjs/"
+rm -f "$BUILD_DIR/body.html"  # Clean up temporary file
 
 echo -e "\rinfo: generating preview HTML                         ok"
 
-echo "Build completed successfully!"
-echo "Output files:"
-echo "- Main HTML: $BUILD_DIR/content.html"
-echo "- Preview: $BUILD_DIR/preview.html"
+echo -n "info: build completed successfully..."
+echo -e "\rinfo: build completed successfully                    ok"
+echo "info: output files:"
+echo "      - Main HTML: $BUILD_DIR/content.html"
+echo "      - Preview: $BUILD_DIR/preview.html"
