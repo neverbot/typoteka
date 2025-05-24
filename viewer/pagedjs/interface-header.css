@@ -157,8 +157,9 @@
 #interface-header {
   all: initial;
 }
+
 #interface-header * {
-/*  all: unset;*/
+  /*  all: unset;*/
 }
 
 @font-face {
@@ -181,6 +182,7 @@
   bottom: 0;
   top: unset;
 }
+
 #interface-header {
   width: 100vw;
   height: var(--pagedjs-header-height);
@@ -227,9 +229,9 @@ form {
   align-items: center;
   margin-bottom: 1ch;
 }
+
 #interface-header .grid-form h1 {
   font-size: 14px;
-
   width: 14ch;
   margin: 0;
   margin-right: 3ch;
@@ -288,7 +290,7 @@ form {
   align-items: center;
 }
 
-#header-group-right > p {
+#header-group-right>p {
   margin-right: 5ch !important;
   margin-top: 0 !important;
   margin-left: 0 !important;
@@ -321,7 +323,7 @@ form {
 
 #button-print svg {
   fill: var(--color-interface-header);
-  width: 25px; 
+  width: 25px;
   height: 25px;
 }
 
