@@ -9,15 +9,16 @@ example/               # Example book content
   ├── typoteka.json    # Book configuration
   └── frankenstein.md  # Book content in markdown
 styles/                # Style templates
-  └── test/            # Example style
+  └── example/         # Example style
       ├── styles.css   # Main CSS styles
+      ├── fonts/       # Font files
       └── fixes/       # Style-specific fixes
           ├── pandoc/  # Pandoc Lua filters
-          └── pagedjs/ # PagedJS handlers
+          └── pagedjs/ # PagedJS javascript handlers
 lib/                   # External dependencies
   └── pagedjs/         # PagedJS library (git submodule)
 viewer/                # Web viewer interface
-  ├── fonts/           # Embedded fonts
+  ├── fonts/           # Fonts used by the viewer
   └── pagedjs/         # Viewer-specific PagedJS setup
 ```
 

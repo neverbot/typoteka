@@ -10,7 +10,7 @@
     ]
   },
   "styles": {
-    "path": "../styles/test",
+    "path": "../styles/example",
     "fixes": {
       "pandoc": [
         "fixes/pandoc/filter-html-auto-table-column-widths.lua"
