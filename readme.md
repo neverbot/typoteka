@@ -65,7 +65,7 @@ The repository includes an example book: Mary Shelley's "Frankenstein; or, The M
 
 This project relies on these open-source tools:
 
-- [**pandoc**](https://pandoc.org): Universal document converter.
-- [**pagedjs**](https://pagedjs.org): Library for paginating content in the browser.
-- [**jq**](https://stedolan.github.io/jq/): Command-line JSON processor.
+- [pandoc](https://pandoc.org): Universal document converter.
+- [pagedjs](https://pagedjs.org): Library for paginating content in the browser.
+- [jq](https://stedolan.github.io/jq/): Command-line JSON processor.
 - The web viewer is based on the pagedjs starter kit: [book_avanced-interface](https://gitlab.coko.foundation/pagedjs/starter-kits/book_avanced-interface).
