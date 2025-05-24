@@ -142,12 +142,15 @@ fi
 echo -e "\rinfo: backing up current build                        ok"
 
 echo -n "info: preparing build directory..."
+rm -rf "$BUILD_DIR"
 mkdir -p "$BUILD_DIR/styles"
 echo -e "\rinfo: preparing build directory                       ok"
 
-# Copy style files
+# Copy only required style files (exclude pandoc fixes)
 echo -n "info: copying style files..."
-cp -R "$STYLES_DIR"/* "$BUILD_DIR/styles/"
+mkdir -p "$BUILD_DIR/styles/fixes/pagedjs"
+cp "$STYLES_DIR"/*.css "$BUILD_DIR/styles/"
+cp "$STYLES_DIR/fixes/pagedjs/"*.js "$BUILD_DIR/styles/fixes/pagedjs/"
 echo -e "\rinfo: copying style files                             ok"
 
 # Copy assets based on patterns
@@ -179,13 +182,13 @@ pandoc --standalone \
     --section-divs=true \
     $PANDOC_FILTERS \
     $CONTENT_FILES \
-    -o "$BUILD_DIR/book.html"
+    -o "$BUILD_DIR/content.html"
 echo -e "\rinfo: generating HTML from markdown files             ok"
 
 # Generate preview HTML
 echo -n "info: generating preview HTML..."
 # Extract body content
-sed -n '/<body>/,/<\/body>/p' "$BUILD_DIR/book.html" | tail -n +2 | ghead -n -1 > "$BUILD_DIR/body.html"
+sed -n '/<body>/,/<\/body>/p' "$BUILD_DIR/content.html" | tail -n +2 | ghead -n -1 > "$BUILD_DIR/body.html"
 
 # Create preview HTML using template
 TEMPLATE_PATH="template/template.html"
@@ -196,14 +199,28 @@ fi
 
 TEMPLATE_FILE=$(cat "$TEMPLATE_PATH")
 BODY=$(cat "$BUILD_DIR/body.html")
-echo "${TEMPLATE_FILE/\%\^CONTENT\%\^/$BODY}" > "$BUILD_DIR/preview.html"
+
+# Generate handler script tags from pagedjs scripts
+HANDLER_SCRIPTS=""
+for script in $PAGEDJS_SCRIPTS; do
+    # Get the path relative to styles directory by removing the STYLES_DIR prefix
+    RELATIVE_PATH="./styles/${script#$STYLES_DIR/}"
+    HANDLER_SCRIPTS="${HANDLER_SCRIPTS}<script src=\"${RELATIVE_PATH}\"></script>"
+done
+
+# Replace markers in template and save to preview.html
+PREVIEW_HTML="${TEMPLATE_FILE//%^HANDLERS%^/$HANDLER_SCRIPTS}"
+PREVIEW_HTML="${PREVIEW_HTML//%^CONTENT%^/$BODY}"
+printf '%s\n' "$PREVIEW_HTML" > "$BUILD_DIR/preview.html"
 
 # Copy preview-specific assets
-cp -R "$STYLES_DIR"/* "$BUILD_DIR/styles/"
+mkdir -p "$BUILD_DIR/styles/fixes/pagedjs"
+cp "$STYLES_DIR/styles.css" "$BUILD_DIR/styles/"
+cp "$STYLES_DIR/fixes/pagedjs/"*.js "$BUILD_DIR/styles/fixes/pagedjs/"
 
-echo -e "\rinfo: generating preview HTML                               ok"
+echo -e "\rinfo: generating preview HTML                         ok"
 
 echo "Build completed successfully!"
 echo "Output files:"
-echo "- Main HTML: $BUILD_DIR/book.html"
+echo "- Main HTML: $BUILD_DIR/content.html"
 echo "- Preview: $BUILD_DIR/preview.html"
