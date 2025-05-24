@@ -67,5 +67,5 @@ This project relies on these open-source tools:
 
 - [pandoc](https://pandoc.org): Universal document converter.
 - [pagedjs](https://pagedjs.org): Library for paginating content in the browser.
+- [book_avanced-interface](https://gitlab.coko.foundation/pagedjs/starter-kits/book_avanced-interface): The web viewer is based on this pagedjs starter kit.
 - [jq](https://stedolan.github.io/jq/): Command-line JSON processor.
-- The web viewer is based on the pagedjs starter kit: [book_avanced-interface](https://gitlab.coko.foundation/pagedjs/starter-kits/book_avanced-interface).
