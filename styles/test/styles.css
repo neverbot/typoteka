@@ -1,1 +1,25 @@
-/* empty test */
+@media print{
+
+    @page{
+        size: A5;
+        bleed: 6mm; 
+        marks: crop;
+        @bottom-center{
+            content: counter(page);
+        }
+    }
+    
+}
+
+h1{
+    font-family: 'VG5000';
+    text-align: center;
+}
+
+#image{
+    max-width: 100%;
+}
+
+
+
+

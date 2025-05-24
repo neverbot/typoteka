@@ -143,8 +143,14 @@ echo -e "\rinfo: backing up current build                        ok"
 
 echo -n "info: preparing build directory..."
 rm -rf "$BUILD_DIR"
-mkdir -p "$BUILD_DIR/styles"
+mkdir -p "$BUILD_DIR/styles/fixes/pagedjs" "$BUILD_DIR/viewer"
 echo -e "\rinfo: preparing build directory                       ok"
+
+# Copy PagedJS viewer files
+echo -n "info: copying viewer files..."
+cp viewer/pagedjs/*.{js,html,css} "$BUILD_DIR/viewer/"
+cp -R viewer/fonts "$BUILD_DIR/viewer/"
+echo -e "\rinfo: copying viewer files                            ok"
 
 # Copy only required style files (exclude pandoc fixes)
 echo -n "info: copying style files..."

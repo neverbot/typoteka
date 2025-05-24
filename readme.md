@@ -47,7 +47,7 @@ Take a look at the [example book](example/typoteka.json) for a complete configur
 
 ## Example Book
 
-The repository includes an example book: Mary Shelley's "Frankenstein; or, The Modern Prometheus" (1818). The content is sourced from [Project Gutenberg](https://www.gutenberg.org/ebooks/84), which provides free access to thousands of public domain books.
+The repository includes an example book: [Mary Shelley's "Frankenstein; or, The Modern Prometheus" (1818)](https://www.gutenberg.org/ebooks/84). The content is sourced from [Project Gutenberg](https://www.gutenberg.org/), which provides free access to thousands of public domain books.
 
 ## Usage
 
