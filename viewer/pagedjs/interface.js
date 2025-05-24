@@ -41,15 +41,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
         if(baselineToggle == "no-baseline"){
             body.classList.add('no-baseline');
-            baselineButton.innerHTML = "see";
+            baselineButton.innerHTML = "See";
         }else if(baselineToggle == "baseline"){
             body.classList.remove('no-baseline');
             document.querySelector("#baseline-toggle").checked = "checked";
-            baselineButton.innerHTML = "hide";
+            baselineButton.innerHTML = "Hide";
         }else{
             body.classList.add('no-baseline');
             localStorage.setItem('baselineToggle' + fileTitle, 'no-baseline');
-            baselineButton.innerHTML = "see";
+            baselineButton.innerHTML = "See";
         }
 
         /* Get baseline size and position on load*/
@@ -77,12 +77,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 /* see baseline */
                 body.classList.remove('no-baseline');
                 localStorage.setItem('baselineToggle' + fileTitle, 'baseline');
-                baselineButton.innerHTML = "hide";
+                baselineButton.innerHTML = "Hide";
             }else{
                 /* hide baseline */
                 body.classList.add('no-baseline');
                 localStorage.setItem('baselineToggle' + fileTitle, 'no-baseline');
-                baselineButton.innerHTML = "see";
+                baselineButton.innerHTML = "See";
             }
         });
 
@@ -111,11 +111,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
             if(e.target.checked){
                 /* see baseline */
                 body.classList.remove('no-marginboxes');
-                marginButton.innerHTML = "hide";
+                marginButton.innerHTML = "Hide";
             }else{
                 /* hide baseline */
                 body.classList.add('no-marginboxes');
-                marginButton.innerHTML = "see";
+                marginButton.innerHTML = "See";
             }
         });
 
