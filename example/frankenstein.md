@@ -2,12 +2,6 @@
 
 []{#wrap0000.xhtml}
 
-::: x-ebookmaker-cover
-<svg xmlns="http://www.w3.org/2000/svg" height="100%" preserveaspectratio="xMidYMid meet" version="1.1" viewbox="0 0 1600 2400" width="100%" xmlns:xlink="http://www.w3.org/1999/xlink">
-`<image width="1600" height="2400" xlink:href="5095274894661566813_84-cover.png">`{=html}`</image>`{=html}
-</svg>
-:::
-
 []{#1672564695976068600_84-h-0.htm.xhtml}
 
 ::::::: {#1672564695976068600_84-h-0.htm.xhtml_pg-header .section .pg-boilerplate .pgheader lang="en"}
