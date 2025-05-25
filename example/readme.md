@@ -8,7 +8,9 @@ The conversion has been done executing:
 pandoc frankenstein.epub -o frankenstein.md --extract-media=./media --wrap=none
 ```
 
-The only change made to the markdown file is the removal of a few lines at the beginning that were not part of the book content, which will generate wrong image links (notice the xlink:href attribute is not relative to the `media` directory). Don't know if this is a bug in Pandoc or in the epub file, but it is not a problem related to Typoteka.
+The only changes made to the markdown file are: 
+
+Important one: the removal of a few lines at the beginning that were not part of the book content, which will generate wrong image links (notice the xlink:href attribute is not relative to the `media` directory). Don't know if this is a bug in Pandoc or in the epub file, but it is not a problem related to Typoteka.
 
 ```markdown
 ::: x-ebookmaker-cover
@@ -17,3 +19,5 @@ The only change made to the markdown file is the removal of a few lines at the b
 </svg>
 :::
 ```
+
+Either way, the best solution is to remove the head of the book until: `START OF THE PROJECT GUTENBERG EBOOK` and from `END OF THE PROJECT GUTENBERG EBOOK` to the end. Remove the full sections inside fenced blocks (`:::::`) including this messages.
