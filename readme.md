@@ -4,17 +4,27 @@
 
 It is a minimal yet powerful toolkit for crafting well-styled books and documents. Write your content in [Markdown](https://en.wikipedia.org/wiki/Markdown), convert it to clean HTML with [Pandoc](https://pandoc.org), apply custom CSS for layout and design, and render high-quality PDFs using [paged.js](https://pagedjs.org). **Typoteka** is aimed at writers, designers, and developers who want full control over the publishing process using open, modern technologies.
 
-## Usage
+**Why?** Because separating content from presentation matters. Traditional layout software often entangles text with visual formatting, making it harder to reuse, revise, or version-control your work. Typoteka follows a clean, modern approach where your writing lives in Markdown—**plain, portable, and future-proof**—while design is handled independently via CSS. This separation gives you flexibility, clarity, and the power to publish beautifully without compromising structure. Both your writing and your design styles can in **version control** systems like git, making collaboration, tracking changes, and managing revisions seamless and transparent.
 
-1. Create a directory for your book content with a `typoteka.json` file
-2. Write your content in Markdown files
-3. Run the build script:
-   ```bash
-   ./build.sh path/to/content-dir
-   ```
-4. Find the generated files in the `build` directory:
-   - `book.html`: The main HTML file
-   - `preview.html`: A styled preview with the PagedJS interface
+## Project Structure
+
+```
+example/               # Example book content
+  ├── typoteka.json    # Book configuration
+  └── frankenstein.md  # Book content in markdown
+styles/                # Style templates
+  └── example/         # Example style
+      ├── styles.css   # Main CSS styles
+      ├── fonts/       # Font files
+      └── fixes/       # Style-specific fixes
+          ├── pandoc/  # Pandoc Lua filters
+          └── pagedjs/ # PagedJS javascript handlers
+lib/                   # External dependencies
+  └── pagedjs/         # PagedJS library (git submodule)
+viewer/                # Web viewer interface
+  ├── fonts/           # Fonts used by the viewer
+  └── pagedjs/         # Viewer-specific PagedJS setup
+```
 
 ## Configuration
 
@@ -44,34 +54,17 @@ Take a look at the [example book](example/typoteka.json) for a complete configur
 
 The repository includes an example book: [Mary Shelley's "Frankenstein; or, The Modern Prometheus" (1818)](https://www.gutenberg.org/ebooks/84). The content is sourced from [Project Gutenberg](https://www.gutenberg.org/), which provides free access to thousands of public domain books.
 
-```bash
-# this will convert the book inside the example directory
-./build.sh example
-```
+## Usage
 
-### Alternative styles
-
-If you want to test how Typoteka works with different styles, you can clone edit the `example/typoteka.json` file and change the `styles.path` property to point to a different style directory, for example:
-
-```json
-  "styles": {
-    "path": "../styles/example",
-```
-
-to:
-
-```json
-  "styles": {
-    "path": "../styles/novel",
-```
-
-Then run the build script again:
-
-```bash
-./build.sh example
-```
-
-and the book will be generated using the new style.
+1. Create a directory for your book content with a `typoteka.json` file
+2. Write your content in Markdown files
+3. Run the build script:
+   ```bash
+   ./build.sh path/to/content-dir
+   ```
+4. Find the generated files in the `build` directory:
+   - `book.html`: The main HTML file
+   - `preview.html`: A styled preview with the PagedJS interface
 
 ## Tools and Dependencies
 
@@ -81,23 +74,3 @@ This project relies on these open-source tools:
 - [pagedjs](https://pagedjs.org): Library for paginating content in the browser.
 - [book_avanced-interface](https://gitlab.coko.foundation/pagedjs/starter-kits/book_avanced-interface): The web viewer is based on this pagedjs starter kit.
 - [jq](https://stedolan.github.io/jq/): Command-line JSON processor.
-
-## Project Structure
-
-```
-example/               # Example book content
-  ├── typoteka.json    # Book configuration
-  └── frankenstein.md  # Book content in markdown
-styles/                # Style templates
-  └── example/         # Example style
-      ├── styles.css   # Main CSS styles
-      ├── fonts/       # Font files
-      └── fixes/       # Style-specific fixes
-          ├── pandoc/  # Pandoc Lua filters
-          └── pagedjs/ # PagedJS javascript handlers
-lib/                   # External dependencies
-  └── pagedjs/         # PagedJS library (git submodule)
-viewer/                # Web viewer interface
-  ├── fonts/           # Fonts used by the viewer
-  └── pagedjs/         # Viewer-specific PagedJS setup
-```
