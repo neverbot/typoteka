@@ -53,21 +53,9 @@ The repository includes an example book: [Mary Shelley's "Frankenstein; or, The 
 
 ### Alternative styles
 
-If you want to test how Typoteka works with different styles, you can clone edit the `example/typoteka.json` file and change the `styles.path` property to point to a different style directory, for example:
+If you want to test how Typoteka works with different styles, you can edit the `example/typoteka.json` file and change its values. Inside the `example` directory, you can find both `typoteka.example.json` and `typoteka.novel.json`. The first one is the default style, while the second one is a more traditional novel style with more complex layout.
 
-```json
-  "styles": {
-    "path": "../styles/example",
-```
-
-to:
-
-```json
-  "styles": {
-    "path": "../styles/novel",
-```
-
-Then run the build script again:
+To switch to the novel style, change the contents of `typoteka.json` with the contents of `typoteka.novel.json`, then run the build script again:
 
 ```bash
 ./build.sh example
