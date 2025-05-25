@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', (event) => {
+  // Initialize debug system early
+  initializeDebugSystem();
+  
   let p = includeHTML();
   p.then(() => {
     interfaceEvents();
@@ -7,8 +10,17 @@ document.addEventListener('DOMContentLoaded', (event) => {
   let flowBook = document.querySelector("#book-content");
   let book_content = flowBook.content;
   let paged = new Paged.Previewer();
+  
+  debugLog('Starting PagedJS preview...', 'info');
+  updatePagedJSStatus('Rendering...');
+  
   paged.preview(book_content, ["styles/styles.css"], document.querySelector("#renderbook")).then((flow) => {
-
+    debugLog('PagedJS preview completed successfully', 'success');
+    updatePagedJSStatus('Ready');
+  }).catch((error) => {
+    debugLog(`PagedJS preview failed: ${error.message}`, 'error');
+    updatePagedJSStatus('Error');
+    updatePagedJSError(error.message);
   });
 });
 
@@ -115,6 +127,19 @@ function interfaceEvents() {
       body.classList.remove('interface-preview');
     }
   });
+
+  /* Debug ------------------------------------------------------------------------------------------------------ 
+  ----------------------------------------------------------------------------------------------------------------*/
+
+  document.querySelector("#debug-toggle").addEventListener("input", (e) => {
+    const debugPanel = document.querySelector("#debug-panel");
+    if (e.target.checked) {
+      debugPanel.style.display = 'block';
+      debugLog('Debug panel opened', 'info');
+    } else {
+      debugPanel.style.display = 'none';
+    }
+  });
 }
 
 function includeHTML() {
@@ -154,13 +179,211 @@ class interfacePaged extends Paged.Handler {
     let nbr = page.id.replace('page-', '');
     let span = document.querySelector("#nrb-pages");
     span.innerHTML = nbr;
+    
+    // Update debug panel
+    updatePagedJSPages(nbr);
   }
-
 
   afterRendered(pages) {
     let print = document.querySelector("#button-print");
     print.dataset.ready = 'true';
+    
+    debugLog(`Rendering completed. Total pages: ${pages.length}`, 'success');
+    updatePagedJSStatus('Completed');
+    updatePagedJSPages(pages.length);
   }
 }
 
 Paged.registerHandlers(interfacePaged);
+
+// Debug System
+let debugConsole = null;
+let originalConsole = {};
+
+function initializeDebugSystem() {
+  // Capture original console methods
+  originalConsole = {
+    log: console.log,
+    warn: console.warn,
+    error: console.error,
+    info: console.info
+  };
+
+  // Override console methods to capture output
+  console.log = (...args) => {
+    originalConsole.log(...args);
+    debugLog(args.join(' '), 'log');
+  };
+
+  console.warn = (...args) => {
+    originalConsole.warn(...args);
+    debugLog(args.join(' '), 'warn');
+  };
+
+  console.error = (...args) => {
+    originalConsole.error(...args);
+    debugLog(args.join(' '), 'error');
+  };
+
+  console.info = (...args) => {
+    originalConsole.info(...args);
+    debugLog(args.join(' '), 'info');
+  };
+
+  // Capture unhandled errors
+  window.addEventListener('error', (event) => {
+    debugLog(`Unhandled error: ${event.error.message} at ${event.filename}:${event.lineno}`, 'error');
+    updatePagedJSError(event.error.message);
+  });
+
+  // Initialize debug panel after DOM is ready
+  document.addEventListener('DOMContentLoaded', () => {
+    debugConsole = document.querySelector("#debug-console");
+    setupDebugButtons();
+  });
+}
+
+function setupDebugButtons() {
+  const clearBtn = document.querySelector("#debug-clear-btn");
+  const exportBtn = document.querySelector("#debug-export-btn");
+  const reinitBtn = document.querySelector("#debug-reinit-btn");
+  const testOverflowBtn = document.querySelector("#debug-test-overflow-btn");
+
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      if (debugConsole) {
+        debugConsole.innerHTML = '';
+        debugLog('Console cleared', 'info');
+      }
+    });
+  }
+
+  if (exportBtn) {
+    exportBtn.addEventListener('click', () => {
+      exportDebugLog();
+    });
+  }
+
+  if (reinitBtn) {
+    reinitBtn.addEventListener('click', () => {
+      reinitializePagedJS();
+    });
+  }
+
+  if (testOverflowBtn) {
+    testOverflowBtn.addEventListener('click', () => {
+      testOverflowHandling();
+    });
+  }
+}
+
+function debugLog(message, type = 'log') {
+  if (!debugConsole) return;
+
+  const timestamp = new Date().toLocaleTimeString();
+  const logEntry = document.createElement('div');
+  logEntry.className = `reset-this debug-log-entry debug-${type}`;
+  logEntry.innerHTML = `<span class="reset-this debug-timestamp">[${timestamp}]</span> <span class="reset-this debug-message">${message}</span>`;
+  
+  debugConsole.appendChild(logEntry);
+  debugConsole.scrollTop = debugConsole.scrollHeight;
+}
+
+function updatePagedJSStatus(status) {
+  const statusElement = document.querySelector("#pagedjs-status");
+  if (statusElement) {
+    statusElement.textContent = status;
+    statusElement.className = `reset-this debug-value status-${status.toLowerCase()}`;
+  }
+}
+
+function updatePagedJSPages(count) {
+  const pagesElement = document.querySelector("#pagedjs-pages");
+  if (pagesElement) {
+    pagesElement.textContent = count;
+  }
+}
+
+function updatePagedJSError(error) {
+  const errorElement = document.querySelector("#pagedjs-error");
+  if (errorElement) {
+    errorElement.textContent = error;
+    errorElement.className = "reset-this debug-value error-text";
+  }
+}
+
+function exportDebugLog() {
+  if (!debugConsole) return;
+
+  const logs = Array.from(debugConsole.children).map(entry => {
+    const timestamp = entry.querySelector('.debug-timestamp').textContent;
+    const message = entry.querySelector('.debug-message').textContent;
+    const type = entry.className.match(/debug-(\w+)/)?.[1] || 'log';
+    return `${timestamp} [${type.toUpperCase()}] ${message}`;
+  }).join('\n');
+
+  const blob = new Blob([logs], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `pagedjs-debug-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.txt`;
+  a.click();
+  URL.revokeObjectURL(url);
+
+  debugLog('Debug log exported', 'info');
+}
+
+function reinitializePagedJS() {
+  debugLog('Reinitializing PagedJS...', 'info');
+  updatePagedJSStatus('Reinitializing...');
+  
+  try {
+    // Clear existing rendering
+    const renderTarget = document.querySelector("#renderbook");
+    if (renderTarget) {
+      renderTarget.innerHTML = '';
+    }
+
+    // Get content again
+    const flowBook = document.querySelector("#book-content");
+    const book_content = flowBook.content;
+    
+    // Create new previewer
+    const paged = new Paged.Previewer();
+    
+    paged.preview(book_content, ["styles/styles.css"], renderTarget).then((flow) => {
+      debugLog('PagedJS reinitialization completed successfully', 'success');
+      updatePagedJSStatus('Ready');
+    }).catch((error) => {
+      debugLog(`PagedJS reinitialization failed: ${error.message}`, 'error');
+      updatePagedJSStatus('Error');
+      updatePagedJSError(error.message);
+    });
+  } catch (error) {
+    debugLog(`Failed to reinitialize PagedJS: ${error.message}`, 'error');
+    updatePagedJSStatus('Error');
+    updatePagedJSError(error.message);
+  }
+}
+
+function testOverflowHandling() {
+  debugLog('Testing overflow handling...', 'info');
+  
+  // Test the addOverflowNodes function with null parameters
+  try {
+    // This should trigger our defensive null checks
+    if (window.Paged && window.Paged.Layout) {
+      const layout = new window.Paged.Layout();
+      if (layout.addOverflowNodes) {
+        layout.addOverflowNodes(null, null);
+        debugLog('Overflow handling test completed - null checks working', 'success');
+      } else {
+        debugLog('addOverflowNodes method not found', 'warn');
+      }
+    } else {
+      debugLog('PagedJS Layout not available for testing', 'warn');
+    }
+  } catch (error) {
+    debugLog(`Overflow handling test failed: ${error.message}`, 'error');
+  }
+}

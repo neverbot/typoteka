@@ -335,7 +335,7 @@ form {
 }
 
 #label-preview-toggle,
-#button-print {
+#button-print, #label-debug-toggle {
   --buttons-size: 36px;
   display: flex;
   align-items: center;
@@ -355,12 +355,17 @@ form {
   border: 2px solid var(--color-interface-header);
 }
 
+#label-debug-toggle svg {
+  opacity: 0.9;
+}
+
 #button-print {
   padding: 6px;
 }
 
 #label-preview-toggle:hover,
-#button-print:hover {
+#button-print:hover,
+#label-debug-toggle:hover {
   background-color: var(--backgroung-button);
 }
 
