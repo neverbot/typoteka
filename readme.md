@@ -6,7 +6,7 @@ It is a minimal yet powerful toolkit for crafting well-styled books and document
 
 **Why?** Because separating content from presentation matters. Traditional layout software often entangles text with visual formatting, making it harder to reuse, revise, or version-control your work. Typoteka follows a clean, modern approach where your writing lives in Markdown—**plain, portable, and future-proof**—while design is handled independently via CSS. This separation gives you flexibility, clarity, and the power to publish beautifully without compromising structure. Both your writing and your design styles can in **version control** systems like git, making collaboration, tracking changes, and managing revisions seamless and transparent.
 
-## Project Structure
+## Usage
 
 1. Create a directory for your book content with a `typoteka.json` file
 2. Write your content in Markdown files
@@ -45,8 +45,6 @@ Take a look at the [example book](example/typoteka.json) for a complete configur
 ## Example Book
 
 The repository includes an example book: [Mary Shelley's "Frankenstein; or, The Modern Prometheus" (1818)](https://www.gutenberg.org/ebooks/84). The content is sourced from [Project Gutenberg](https://www.gutenberg.org/), which provides free access to thousands of public domain books.
-
-## Usage
 
 ```bash
 # this will convert the book inside the example directory
