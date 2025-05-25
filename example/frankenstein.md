@@ -1,13 +1,5 @@
 ![](./media/5095274894661566813_84-cover.png)
 
-[]{#wrap0000.xhtml}
-
-[]{#1672564695976068600_84-h-0.htm.xhtml}
-
-<div>
-
-</div>
-
 # Frankenstein; {#1672564695976068600_84-h-0.htm.xhtml_pgepubid00000}
 
 ### or, the Modern Prometheus {#1672564695976068600_84-h-0.htm.xhtml_pgepubid00001}
