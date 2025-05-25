@@ -15,8 +15,8 @@ It is a minimal yet powerful toolkit for crafting well-styled books and document
    ./build.sh path/to/content-dir
    ```
 4. Find the generated files in the `build` directory:
-   - `book.html`: The main HTML file
-   - `preview.html`: A styled preview with the PagedJS interface
+   - `content.html`: The main HTML file. Just your content, in HTML.
+   - `preview.html`: A styled preview with the PagedJS interface. This is the file you want.
 
 ## Configuration
 
