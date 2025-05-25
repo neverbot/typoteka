@@ -10,13 +10,15 @@
     ]
   },
   "styles": {
-    "path": "../styles/example",
+    "path": "../styles/novel",
     "fixes": {
       "pandoc": [
         "fixes/pandoc/filter-html-auto-table-column-widths.lua",
         "fixes/pandoc/strip-img-paragraphs.lua"
       ],
       "pagedjs": [
+        "fixes/pagedjs/handlers.js",
+        "fixes/pagedjs/create-toc.js"
       ]
     }
   }

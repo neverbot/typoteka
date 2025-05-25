@@ -1,0 +1,166 @@
+@media print {
+  @page {
+    size: A5;
+    /* bleed: 6mm; */
+    /* marks: crop; */
+
+    @bottom-center {
+      content: counter(page);
+    }
+  }
+
+  @page:left {
+    margin: 30mm 30mm 30mm 20mm;
+  }
+
+  @page:right {
+    margin: 30mm 20mm 30mm 30mm;
+  }
+
+  @page:blank {
+    @bottom-center {
+      content: none;
+    }
+  }
+
+  @page:first {
+    margin: 0;
+  }
+}
+
+section.level1 {
+  /* always start on a right page */
+  break-before: right;  
+}
+
+/* Main title */
+section h1 {
+  font-family: 'VG5000', serif;
+  font-size: 48px;
+  font-weight: bold;
+  margin: 3em 0 0.5em 0;
+  padding: 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+section .level2:not(.no-break) h2 {
+  break-before: always;
+}
+
+/* Subtitle */
+section .level3 h3 {
+  font-family: 'EB Garamond', serif;
+  font-size: 24px;
+  font-weight: normal;
+  font-style: italic;
+  margin: 0 0 2em 0;
+  padding: 0;
+}
+
+/* Author name */
+section .level2.no-break h2 {
+  font-family: 'EB Garamond', serif;
+  font-size: 28px;
+  font-weight: normal;
+  margin: 2em 0 0 0;
+  padding: 0;
+}
+
+/* Contents section */
+section#contents {
+  margin-top: 3em;
+  page-break-before: always;
+}
+
+section#contents h2 {
+  font-family: 'VG5000', serif;
+  font-size: 32px;
+  text-align: center;
+  margin-bottom: 1.5em;
+}
+
+section#contents table {
+  width: 80%;
+  margin: 0 auto;
+}
+
+section#contents td {
+  padding: 0;
+  font-size: 16px;
+}
+
+section#contents a {
+  text-decoration: none;
+  color: black;
+}
+
+@font-face {
+  font-family: 'EB Garamond';
+  src: url("./fonts/EB_Garamond/static/EBGaramond-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-size: 16px;
+  line-height: 20px;
+  font-family: 'EB Garamond', serif;
+}
+
+/* h1 {
+  font-family: 'VG5000';
+  text-align: center;
+} */
+
+img {
+  max-width: 100%;
+}
+
+em {
+  font-style: italic;
+}
+
+strong {
+  font-weight: bold;
+}
+
+a {
+  color: initial;
+  text-decoration: underline;
+}
+
+section p {
+  margin: 5px 0 0 0;
+  text-align: justify;
+  hyphens: auto;
+  widows: 2;
+  text-indent: 30px;
+}
+
+.header-section-number {
+  visibility: hidden !important;
+  display: none !important;
+}
+
+#list-toc-generated {
+  list-style: none;
+  padding: 0 10%;
+}
+
+#list-toc-generated .toc-element {
+  break-inside: avoid;
+}
+
+#list-toc-generated .toc-element a::after {
+  content: " p. " target-counter(attr(href), page);
+  float: right;
+}
+
+#list-toc-generated .toc-element-level-1 {
+  font-weight: bold;
+}
+
+#list-toc-generated .toc-element-level-2 {
+  margin-left: 25px;
+}

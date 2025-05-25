@@ -8,8 +8,8 @@ It is a minimal yet powerful toolkit for crafting well-styled books and document
 
 ## Usage
 
-1. Create a directory for your book content with a `typoteka.json` file
-2. Write your content in Markdown files
+1. Create a directory for your book content with a `typoteka.json` file.
+2. Write your content in Markdown files.
 3. Run the build script:
    ```bash
    ./build.sh path/to/content-dir

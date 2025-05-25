@@ -8,23 +8,23 @@
       content: counter(page);
     }
   }
-}
 
-@font-face {
-  font-family: 'EB Garamond';
-  src: url("./fonts/EB_Garamond/static/EBGaramond-Regular.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
+  @page:left {
+    margin: 30mm 30mm 30mm 20mm;
+  }
+
+  @page:right {
+    margin: 30mm 20mm 30mm 30mm;
+  }
 }
 
 body {
-  font-size: 16px;
+  font-size: 14px;
   line-height: 20px;
-  font-family: 'EB Garamond', serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }
 
 h1 {
-  font-family: 'VG5000';
   text-align: center;
 }
 
