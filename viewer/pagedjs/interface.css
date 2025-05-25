@@ -218,6 +218,12 @@ A simple stylesheet to see pages on screen (with baseline included) */
     font-size: 14px;
     font-weight: bold;
     color: #ffffff;
+    flex: 1;
+  }
+
+  .debug-panel-buttons {
+    display: flex;
+    gap: 5px;
   }
 
   .debug-panel-header button {
@@ -228,7 +234,7 @@ A simple stylesheet to see pages on screen (with baseline included) */
     border-radius: 4px;
     cursor: pointer;
     font-size: 11px;
-    margin-left: 5px;
+    margin-left: 0;
   }
 
   .debug-panel-header button:hover {

@@ -88,8 +88,11 @@
 <div class="reset-this" id="debug-panel" style="display: none;">
   <div class="reset-this debug-panel-header">
     <h2 class="reset-this">Debug Console</h2>
-    <button class="reset-this" id="debug-clear-btn">Clear</button>
-    <button class="reset-this" id="debug-export-btn">Export</button>
+    <div class="reset-this debug-panel-buttons">
+      <button class="reset-this" id="debug-copy-btn">Copy Log</button>
+      <button class="reset-this" id="debug-clear-btn">Clear Log</button>
+      <button class="reset-this" id="debug-export-btn">Export Log</button>
+    </div>
   </div>
   <div class="reset-this debug-panel-content">
     <div class="reset-this debug-section">
@@ -120,6 +123,8 @@
         id="debug-reinit-btn">Reinitialize PagedJS</button>
       <button class="reset-this debug-action-btn"
         id="debug-test-overflow-btn">Test Overflow Handling</button>
+      <button class="reset-this debug-action-btn"
+        id="debug-analyze-content-btn">Analyze Content Structure</button>
     </div>
   </div>
 </div>
