@@ -4,6 +4,8 @@
 
 It is a minimal yet powerful toolkit for crafting well-styled books and documents. Write your content in [Markdown](https://en.wikipedia.org/wiki/Markdown), convert it to clean HTML with [Pandoc](https://pandoc.org), apply custom CSS for layout and design, and render high-quality PDFs using [paged.js](https://pagedjs.org). **Typoteka** is aimed at writers, designers, and developers who want full control over the publishing process using open, modern technologies.
 
+**Why?** Because separating content from presentation matters. Traditional layout software often entangles text with visual formatting, making it harder to reuse, revise, or version-control your work. Typoteka follows a clean, modern approach where your writing lives in Markdown—**plain, portable, and future-proof**—while design is handled independently via CSS. This separation gives you flexibility, clarity, and the power to publish beautifully without compromising structure. Both your writing and your design styles can in **version control** systems like git, making collaboration, tracking changes, and managing revisions seamless and transparent.
+
 ## Project Structure
 
 ```
