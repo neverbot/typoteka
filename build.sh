@@ -212,16 +212,19 @@ fi
 TEMPLATE_FILE=$(cat "$TEMPLATE_PATH")
 BODY=$(cat "$BUILD_DIR/body.html")
 
-# Generate handler script tags from pagedjs scripts
-HANDLER_SCRIPTS=""
+# Generate handler script tags from pagedjs scripts, maintaining newlines
+HANDLER_SCRIPTS=()
 for script in $PAGEDJS_SCRIPTS; do
     # Get the path relative to styles directory by removing the STYLES_DIR prefix
     RELATIVE_PATH="./styles/${script#$STYLES_DIR/}"
-    HANDLER_SCRIPTS="${HANDLER_SCRIPTS}<script src=\"${RELATIVE_PATH}\"></script>"
+    HANDLER_SCRIPTS+=("    <script src=\"${RELATIVE_PATH}\"></script>")
 done
 
+# Join the scripts with literal newlines
+HANDLERS_STRING="$(printf '%s\n' "${HANDLER_SCRIPTS[@]}")"
+
 # Replace markers in template and save to preview.html
-PREVIEW_HTML="${TEMPLATE_FILE//%^HANDLERS%^/$HANDLER_SCRIPTS}"
+PREVIEW_HTML="${TEMPLATE_FILE//%^HANDLERS%^/$HANDLERS_STRING}"
 PREVIEW_HTML="${PREVIEW_HTML//%^CONTENT%^/$BODY}"
 printf '%s\n' "$PREVIEW_HTML" > "$BUILD_DIR/preview.html"
 rm -f "$BUILD_DIR/body.html"  # Clean up temporary file
