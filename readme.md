@@ -90,6 +90,10 @@ This project relies on these open-source tools:
 example/               # Example book content
   ├── typoteka.json    # Book configuration
   └── frankenstein.md  # Book content in markdown
+
+lib/                   # External dependencies
+  └── pagedjs/         # PagedJS library (git submodule)
+
 styles/                # Style templates
   └── example/         # Example style
       ├── styles.css   # Main CSS styles
@@ -97,9 +101,13 @@ styles/                # Style templates
       └── fixes/       # Style-specific fixes
           ├── pandoc/  # Pandoc Lua filters
           └── pagedjs/ # PagedJS javascript handlers
-lib/                   # External dependencies
-  └── pagedjs/         # PagedJS library (git submodule)
+
+template/              # Template to insert user content in
+  └── template.html    # Main HTML template
+
 viewer/                # Web viewer interface
   ├── fonts/           # Fonts used by the viewer
   └── pagedjs/         # Viewer-specific PagedJS setup
+
+build.sh               # Build script to generate the book
 ```
