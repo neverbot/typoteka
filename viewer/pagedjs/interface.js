@@ -136,15 +136,7 @@ function interfaceEvents() {
   /* Debug ------------------------------------------------------------------------------------------------------ 
   ----------------------------------------------------------------------------------------------------------------*/
 
-  document.querySelector("#debug-toggle").addEventListener("input", (e) => {
-    const debugPanel = document.querySelector("#debug-panel");
-    if (e.target.checked) {
-      debugPanel.style.display = 'block';
-      debugLog('Debug panel opened', 'info');
-    } else {
-      debugPanel.style.display = 'none';
-    }
-  });
+  // Debug toggle is now handled in initializeDebugSystem()
 }
 
 function includeHTML() {
@@ -357,6 +349,29 @@ function initializeDebugSystem() {
     debugLog(`Unhandled error: ${event.error.message} at ${event.filename}:${event.lineno}`, 'error');
     updatePagedJSError(event.error.message);
   });
+  
+  // Setup debug toggle event listener
+  const debugToggle = document.querySelector("#debug-toggle");
+  const debugPanel = document.querySelector("#debug-panel");
+  
+  console.log('Debug toggle elements found:', {
+    toggle: !!debugToggle,
+    panel: !!debugPanel
+  });
+  
+  if (debugToggle && debugPanel) {
+    debugToggle.addEventListener("input", (e) => {
+      if (e.target.checked) {
+        debugPanel.style.display = 'block';
+        debugLog('Debug panel opened', 'info');
+      } else {
+        debugPanel.style.display = 'none';
+      }
+    });
+    console.log('Debug toggle event listener attached successfully');
+  } else {
+    console.warn('Could not find debug toggle or panel elements');
+  }
   
   console.log('=== Debug system fully initialized ===');
 }
