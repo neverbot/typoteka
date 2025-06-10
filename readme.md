@@ -4,7 +4,7 @@
 
 It is a minimal yet powerful toolkit for crafting well-styled books and documents. Write your content in [Markdown](https://en.wikipedia.org/wiki/Markdown), convert it to clean HTML with [Pandoc](https://pandoc.org), apply custom CSS for layout and design, and render high-quality PDFs using [paged.js](https://pagedjs.org). **Typoteka** is aimed at writers, designers, and developers who want full control over the publishing process using open, modern technologies.
 
-**Why?** Because separating content from presentation matters. Traditional layout software often entangles text with visual formatting, making it harder to reuse, revise, or version-control your work. Typoteka follows a clean, modern approach where your writing lives in Markdown—**plain, portable, and future-proof**—while design is handled independently via CSS. This separation gives you flexibility, clarity, and the power to publish beautifully without compromising structure. Both your writing and your design styles can in **version control** systems like git, making collaboration, tracking changes, and managing revisions seamless and transparent.
+**Why?** Because separating content from presentation matters. Traditional layout software often entangles text with visual formatting, making it harder to reuse, revise, or version-control your work. Typoteka follows a clean, modern approach where your writing lives in Markdown—**plain, portable, and future-proof**—while design is handled independently via CSS. This separation gives you flexibility, clarity, and the power to publish beautifully without compromising structure. Both your writing and your design styles can be stored in **version control** systems like git, making collaboration, tracking changes, and managing revisions seamless and transparent.
 
 ## Usage
 
@@ -71,6 +71,32 @@ This project relies on these open-source tools:
 - [pagedjs](https://pagedjs.org): Library for paginating content in the browser.
 - [book_avanced-interface](https://gitlab.coko.foundation/pagedjs/starter-kits/book_avanced-interface): The web viewer is based on this pagedjs starter kit.
 - [jq](https://stedolan.github.io/jq/): Command-line JSON processor.
+
+### How to install and update dependencies
+
+#### Pandoc
+
+To install Pandoc, follow the instructions on the [Pandoc installation page](https://pandoc.org/installing.html).
+
+#### PagedJS
+
+PagedJS is included both built and as a git submodule in the `lib/pagedjs` directory. The built version used in the toolkit is in `viewer/pagedjs/pagedjs.js`. To update it you will need the usual suspects in the JavaScript ecosystem: `node` and `npm`. Probably the easiest way to install them is using [nvm](https://github.com/nvm-sh/nvm), which allows you to use different versions of Node.js and npm easily, although maybe both are already installed in your system.
+
+Once you have both tools available, if you want to update the PagedJS library, you can do so by running:
+
+```bash
+# be sure your pagedjs submodule is the latest version
+git submodule update --remote
+git pull
+
+# then build the library
+cd lib/pagedjs
+npm install
+npm run build
+
+# overwrite the viewer's pagedjs.js file
+cp dist/paged.js ../../viewer/pagedjs/paged.js
+```
 
 ## Project Structure
 
