@@ -10,13 +10,18 @@
     ]
   },
   "styles": {
-    "path": "../styles/example",
+    "path": "../styles/novel",
     "fixes": {
       "pandoc": [
+        "fixes/pandoc/fix-header-hierarchy.lua",
+        "fixes/pandoc/fix-pagedjs-structures.lua",
+        "fixes/pandoc/remove-empty-paragraphs.lua",
         "fixes/pandoc/filter-html-auto-table-column-widths.lua",
         "fixes/pandoc/strip-img-paragraphs.lua"
       ],
       "pagedjs": [
+        "fixes/pagedjs/remove-span-in-h1.js",
+        "fixes/pagedjs/create-toc.js"
       ]
     }
   }

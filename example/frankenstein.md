@@ -1,10 +1,8 @@
 ![](./media/5095274894661566813_84-cover.png)
 
-# Frankenstein; {#1672564695976068600_84-h-0.htm.xhtml_pgepubid00000}
+# Frankenstein; or, the Modern Prometheus {#1672564695976068600_84-h-0.htm.xhtml_pgepubid00001}
 
-### or, the Modern Prometheus {#1672564695976068600_84-h-0.htm.xhtml_pgepubid00001}
-
-## by Mary Wollstonecraft (Godwin) Shelley {.no-break}
+### by Mary Wollstonecraft (Godwin) Shelley {.no-break}
 
 ------------------------------------------------------------------------
 

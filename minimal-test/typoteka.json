@@ -1,13 +1,11 @@
 {
-  "title": "Frankenstein",
+  "title": "Minimal pagination test",
   "language": "en-GB",
   "files": {
     "content": [
-      "frankenstein.md"
+      "minimal-test.md"
     ],
-    "assets": [
-      "media/*"
-    ]
+    "assets": []
   },
   "styles": {
     "path": "../styles/novel",
@@ -15,9 +13,7 @@
       "pandoc": [
         "fixes/pandoc/fix-header-hierarchy.lua",
         "fixes/pandoc/fix-pagedjs-structures.lua",
-        "fixes/pandoc/remove-empty-paragraphs.lua",
-        "fixes/pandoc/filter-html-auto-table-column-widths.lua",
-        "fixes/pandoc/strip-img-paragraphs.lua"
+        "fixes/pandoc/remove-empty-paragraphs.lua"
       ],
       "pagedjs": [
         "fixes/pagedjs/remove-span-in-h1.js",

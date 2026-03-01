@@ -11,10 +11,11 @@ class RemoveSpanInH1Handler extends Paged.Handler {
     // remove the span inside every h1 element, 
     // as its contents would be rendered on every
     // page header
+
     if (node.nodeName === 'H1') {
       if (node.children.length > 0) {
         node.children[0].remove()
-        // console.log(node)
+        // console.log('removed span in h1', node)
       }
     }
   }

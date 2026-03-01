@@ -1,31 +1,45 @@
-// Debug startup - immediate console test
-console.log('=== TYPOTEKA DEBUG: JavaScript file loaded ===');
+// Typoteka interface.js
 
 document.addEventListener('DOMContentLoaded', (event) => {
-  console.log('=== TYPOTEKA DEBUG: DOM loaded ===');
-  
   let p = includeHTML();
   p.then(() => {
-    // Initialize debug system after interface is loaded
     initializeDebugSystem();
-    console.log('=== TYPOTEKA DEBUG: Debug system initialized ===');
     interfaceEvents();
-  })
+  });
 
-  let flowBook = document.querySelector("#book-content");
-  let book_content = flowBook.content;
-  let paged = new Paged.Previewer();
-  
-  debugLog('Starting PagedJS preview...', 'info');
-  updatePagedJSStatus('Rendering...');
-  
-  paged.preview(book_content, ["styles/styles.css"], document.querySelector("#renderbook")).then((flow) => {
-    debugLog('PagedJS preview completed successfully', 'success');
-    updatePagedJSStatus('Ready');
-  }).catch((error) => {
-    debugLog(`PagedJS preview failed: ${error.message}`, 'error');
-    updatePagedJSStatus('Error');
-    updatePagedJSError(error.message);
+  function startPreview() {
+    var flowBook = document.querySelector("#book-content");
+    if (!flowBook || !flowBook.content) {
+      debugLog('Book content template not found', 'error');
+      return;
+    }
+    
+    debugLog('Content loaded, starting PagedJS...', 'info');
+    var book_content = flowBook.content;
+    
+    var paged = new Paged.Previewer();
+    updatePagedJSStatus('Rendering...');
+    paged.preview(book_content, ["styles/styles.css"], document.querySelector("#renderbook")).then(function (flow) {
+      updatePagedJSStatus('Ready');
+    }).catch(function (error) {
+      debugLog('PagedJS preview failed: ' + error.message, 'error');
+      updatePagedJSStatus('Error');
+      updatePagedJSError(error.message);
+    });
+  }
+
+  function whenFullyLoaded(fn) {
+    if (document.readyState === 'complete') {
+      fn();
+    } else {
+      window.addEventListener('load', fn);
+    }
+  }
+
+  whenFullyLoaded(function () {
+    p.then(function () {
+      startPreview();
+    });
   });
 });
 
@@ -170,117 +184,31 @@ function includeHTML() {
 class interfacePaged extends Paged.Handler {
   constructor(chunker, polisher, caller) {
     super(chunker, polisher, caller);
-    debugLog('PagedJS Handler initialized', 'info');
-  }
-
-  beforeParsed(content) {
-    debugLog(`beforeParsed: Content length: ${content.length} characters`, 'info');
-  }
-
-  afterParsed(parsed) {
-    debugLog(`afterParsed: Found ${parsed.children.length} top-level elements`, 'info');
-  }
-
-  beforePageLayout(page, contents, breakToken) {
-    debugLog(`beforePageLayout: Page ${page.id}, Content items: ${contents ? contents.length : 'none'}`, 'info');
-    if (breakToken) {
-      debugLog(`beforePageLayout: Break token present - ${breakToken.toString()}`, 'info');
-    }
   }
 
   afterPageLayout(pageElement, page, breakToken) {
-    let nbr = page.id.replace('page-', '');
-    let span = document.querySelector("#nrb-pages");
-    span.innerHTML = nbr;
-    
-    debugLog(`afterPageLayout: Completed page ${nbr}`, 'info');
-    
-    if (breakToken) {
-      debugLog(`afterPageLayout: Break token for next page - ${breakToken.toString()}`, 'info');
-      if (breakToken.node) {
-        debugLog(`afterPageLayout: Break at node: ${breakToken.node.nodeName} - "${breakToken.node.textContent?.substring(0, 50)}..."`, 'info');
-      }
-    } else {
-      debugLog(`afterPageLayout: No break token - this might be the last page`, 'warn');
-    }
-    
-    // Update debug panel
+    const nbr = page.id.replace('page-', '');
+    const span = document.querySelector("#nrb-pages");
+    if (span) span.innerHTML = nbr;
     updatePagedJSPages(nbr);
   }
 
   renderError(error) {
-    debugLog(`PagedJS Render Error: ${error.message}`, 'error');
-    debugLog(`Error stack: ${error.stack}`, 'error');
+    debugLog(`PagedJS error: ${error.message}`, 'error');
     updatePagedJSError(error.message);
   }
 
   layoutError(error) {
-    debugLog(`PagedJS Layout Error: ${error.message}`, 'error');
-    debugLog(`Error stack: ${error.stack}`, 'error');
+    debugLog(`PagedJS layout error: ${error.message}`, 'error');
     updatePagedJSError(error.message);
   }
 
   afterRendered(pages) {
-    let print = document.querySelector("#button-print");
-    print.dataset.ready = 'true';
-    
-    debugLog(`afterRendered: Total pages rendered: ${pages.length}`, 'success');
-    
-    // Check if we have content after the last page
-    const lastPage = pages[pages.length - 1];
-    if (lastPage && lastPage.element) {
-      debugLog(`afterRendered: Last page content length: ${lastPage.element.textContent?.length || 0} characters`, 'info');
-    }
-    
-    updatePagedJSStatus('Completed');
+    const print = document.querySelector("#button-print");
+    if (print) print.dataset.ready = 'true';
+    debugLog(`Preview ready: ${pages.length} pages`, 'info');
     updatePagedJSPages(pages.length);
-    
-    // Additional diagnostics
-    this.diagnoseContentCompletion();
-  }
-
-  diagnoseContentCompletion() {
-    debugLog('=== Content Completion Diagnostics ===', 'info');
-    
-    // Check original content length
-    const bookContent = document.querySelector("#book-content");
-    if (bookContent && bookContent.content) {
-      const originalContent = bookContent.content.cloneNode(true);
-      const originalText = originalContent.textContent || '';
-      debugLog(`Original content length: ${originalText.length} characters`, 'info');
-    }
-    
-    // Check rendered content length
-    const renderedContent = document.querySelector("#renderbook");
-    if (renderedContent) {
-      const renderedText = renderedContent.textContent || '';
-      debugLog(`Rendered content length: ${renderedText.length} characters`, 'info');
-      
-      // Look for specific markers to see how far we got
-      const markers = [
-        'Table of Contents',
-        'Letter 1',
-        'Letter 2', 
-        'Letter 3',
-        'Letter 4',
-        'Chapter 1',
-        'Chapter 2',
-        'Chapter 5',
-        'Chapter 10',
-        'Chapter 15',
-        'Chapter 20'
-      ];
-      
-      markers.forEach(marker => {
-        if (renderedText.includes(marker)) {
-          debugLog(`✓ Found: ${marker}`, 'success');
-        } else {
-          debugLog(`✗ Missing: ${marker}`, 'error');
-        }
-      });
-    }
-    
-    debugLog('=== End Diagnostics ===', 'info');
+    updatePagedJSStatus('Completed');
   }
 }
 
@@ -292,26 +220,20 @@ let originalConsole = {};
 let earlyMessages = []; // Buffer for messages before debug console is ready
 
 function initializeDebugSystem() {
-  console.log('=== Initializing debug system ===');
-  
-  // Capture original console methods
   originalConsole = {
     log: console.log,
     warn: console.warn,
     error: console.error,
     info: console.info
   };
-
-  // Find debug console element
   debugConsole = document.querySelector("#debug-console");
-  console.log('Debug console element found:', !!debugConsole);
   
   // Setup debug buttons
   setupDebugButtons();
   
   // Replay any early messages that were buffered
   if (debugConsole && earlyMessages.length > 0) {
-    console.log(`Replaying ${earlyMessages.length} early messages`);
+    // Replay buffered messages
     earlyMessages.forEach(msg => {
       const timestamp = new Date().toLocaleTimeString();
       const logEntry = document.createElement('div');
@@ -354,31 +276,14 @@ function initializeDebugSystem() {
   const debugToggle = document.querySelector("#debug-toggle");
   const debugPanel = document.querySelector("#debug-panel");
   
-  console.log('Debug toggle elements found:', {
-    toggle: !!debugToggle,
-    panel: !!debugPanel
-  });
-  
   if (debugToggle && debugPanel) {
     debugToggle.addEventListener("input", (e) => {
-      if (e.target.checked) {
-        debugPanel.style.display = 'block';
-        debugLog('Debug panel opened', 'info');
-      } else {
-        debugPanel.style.display = 'none';
-      }
+      debugPanel.style.display = e.target.checked ? 'block' : 'none';
     });
-    console.log('Debug toggle event listener attached successfully');
-  } else {
-    console.warn('Could not find debug toggle or panel elements');
   }
-  
-  console.log('=== Debug system fully initialized ===');
 }
 
 function setupDebugButtons() {
-  console.log('Setting up debug buttons...');
-  
   const clearBtn = document.querySelector("#debug-clear-btn");
   const copyBtn = document.querySelector("#debug-copy-btn");
   const exportBtn = document.querySelector("#debug-export-btn");
@@ -386,63 +291,12 @@ function setupDebugButtons() {
   const testOverflowBtn = document.querySelector("#debug-test-overflow-btn");
   const analyzeContentBtn = document.querySelector("#debug-analyze-content-btn");
 
-  console.log('Debug buttons found:', {
-    clear: !!clearBtn,
-    copy: !!copyBtn,
-    export: !!exportBtn,
-    reinit: !!reinitBtn,
-    testOverflow: !!testOverflowBtn,
-    analyzeContent: !!analyzeContentBtn
-  });
-
-  if (clearBtn) {
-    clearBtn.addEventListener('click', () => {
-      console.log('Clear button clicked');
-      if (debugConsole) {
-        debugConsole.innerHTML = '';
-        debugLog('Console cleared', 'info');
-      } else {
-        console.error('Debug console not found for clearing');
-      }
-    });
-  }
-
-  if (copyBtn) {
-    copyBtn.addEventListener('click', () => {
-      console.log('Copy button clicked');
-      copyDebugLog();
-    });
-  }
-
-  if (exportBtn) {
-    exportBtn.addEventListener('click', () => {
-      console.log('Export button clicked');
-      exportDebugLog();
-    });
-  }
-
-  if (reinitBtn) {
-    reinitBtn.addEventListener('click', () => {
-      console.log('Reinit button clicked');
-      reinitializePagedJS();
-    });
-  }
-
-  if (testOverflowBtn) {
-    testOverflowBtn.addEventListener('click', () => {
-      console.log('Test overflow button clicked');
-      testOverflowHandling();
-    });
-  }
-
-  if (analyzeContentBtn) {
-    analyzeContentBtn.addEventListener('click', () => {
-      console.log('Analyze content button clicked');
-      analyzeContentStructure();
-    });
-  }
-  
-  console.log('Debug buttons setup completed');
+  if (clearBtn) clearBtn.addEventListener('click', () => { if (debugConsole) debugConsole.innerHTML = ''; });
+  if (copyBtn) copyBtn.addEventListener('click', copyDebugLog);
+  if (exportBtn) exportBtn.addEventListener('click', exportDebugLog);
+  if (reinitBtn) reinitBtn.addEventListener('click', reinitializePagedJS);
+  if (testOverflowBtn) testOverflowBtn.addEventListener('click', testOverflowHandling);
+  if (analyzeContentBtn) analyzeContentBtn.addEventListener('click', analyzeContentStructure);
 }
 
 function debugLog(message, type = 'log') {
@@ -461,8 +315,8 @@ function debugLog(message, type = 'log') {
   // If still no debug console, buffer the message for later
   if (!debugConsole) {
     earlyMessages.push({ message, type, timestamp: new Date() });
-    if (originalConsole && originalConsole.log) {
-      originalConsole.log('[TYPOTEKA] Debug panel not ready, buffering message:', message);
+    if (originalConsole && originalConsole.log && type === 'error') {
+      originalConsole.log('[TYPOTEKA]', message);
     }
     return;
   }
@@ -477,7 +331,6 @@ function debugLog(message, type = 'log') {
 }
 
 function updatePagedJSStatus(status) {
-  debugLog(`Status update: ${status}`, 'info');
   const statusElement = document.querySelector("#pagedjs-status");
   if (statusElement) {
     statusElement.textContent = status;
@@ -486,7 +339,6 @@ function updatePagedJSStatus(status) {
 }
 
 function updatePagedJSPages(count) {
-  debugLog(`Page count update: ${count}`, 'info');
   const pagesElement = document.querySelector("#pagedjs-pages");
   if (pagesElement) {
     pagesElement.textContent = count;
@@ -494,7 +346,6 @@ function updatePagedJSPages(count) {
 }
 
 function updatePagedJSError(error) {
-  debugLog(`Error update: ${error}`, 'error');
   const errorElement = document.querySelector("#pagedjs-error");
   if (errorElement) {
     errorElement.textContent = error;
@@ -519,16 +370,11 @@ function exportDebugLog() {
   a.download = `pagedjs-debug-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.txt`;
   a.click();
   URL.revokeObjectURL(url);
-
   debugLog('Debug log exported', 'info');
 }
 
 function copyDebugLog() {
-  if (!debugConsole) {
-    debugLog('No debug console available for copying', 'warn');
-    return;
-  }
-
+  if (!debugConsole) return;
   const logs = Array.from(debugConsole.children).map(entry => {
     const timestamp = entry.querySelector('.debug-timestamp').textContent;
     const message = entry.querySelector('.debug-message').textContent;
@@ -537,17 +383,10 @@ function copyDebugLog() {
   }).join('\n');
 
   if (navigator.clipboard && navigator.clipboard.writeText) {
-    // Modern browsers
-    navigator.clipboard.writeText(logs).then(() => {
-      debugLog('Debug log copied to clipboard', 'success');
-    }).catch(err => {
-      debugLog(`Failed to copy log: ${err.message}`, 'error');
-      // Fallback to legacy method
-      fallbackCopyText(logs);
-    });
+    navigator.clipboard.writeText(logs).then(() => debugLog('Log copied to clipboard', 'info')).catch(() => fallbackCopyText(logs));
   } else {
-    // Legacy browsers
     fallbackCopyText(logs);
+    debugLog('Log copied to clipboard', 'info');
   }
 }
 
@@ -564,181 +403,65 @@ function fallbackCopyText(text) {
     
     const successful = document.execCommand('copy');
     document.body.removeChild(textArea);
-    
-    if (successful) {
-      debugLog('Debug log copied to clipboard (legacy method)', 'success');
-    } else {
-      debugLog('Failed to copy log to clipboard', 'error');
-    }
-  } catch (err) {
-    debugLog(`Failed to copy log: ${err.message}`, 'error');
-  }
+  } catch (err) {}
 }
 
 function reinitializePagedJS() {
   debugLog('Reinitializing PagedJS...', 'info');
   updatePagedJSStatus('Reinitializing...');
+  const renderTarget = document.querySelector("#renderbook");
+  if (!renderTarget) return;
+  renderTarget.innerHTML = '';
   
-  try {
-    // Clear existing rendering
-    const renderTarget = document.querySelector("#renderbook");
-    if (renderTarget) {
-      renderTarget.innerHTML = '';
-    }
-
-    // Get content again
-    const flowBook = document.querySelector("#book-content");
-    const book_content = flowBook.content;
-    
-    // Create new previewer
-    const paged = new Paged.Previewer();
-    
-    paged.preview(book_content, ["styles/styles.css"], renderTarget).then((flow) => {
-      debugLog('PagedJS reinitialization completed successfully', 'success');
+  var flowBook = document.querySelector("#book-content");
+  if (!flowBook || !flowBook.content) {
+    debugLog('Book content template not found', 'error');
+    return;
+  }
+  
+  var paged = new Paged.Previewer();
+  paged.preview(flowBook.content, ["styles/styles.css"], renderTarget)
+    .then(function () {
+      debugLog('Reinitialization completed', 'info');
       updatePagedJSStatus('Ready');
-    }).catch((error) => {
-      debugLog(`PagedJS reinitialization failed: ${error.message}`, 'error');
+    })
+    .catch(function (error) {
+      debugLog('PagedJS reinitialization failed: ' + error.message, 'error');
       updatePagedJSStatus('Error');
       updatePagedJSError(error.message);
     });
-  } catch (error) {
-    debugLog(`Failed to reinitialize PagedJS: ${error.message}`, 'error');
-    updatePagedJSStatus('Error');
-    updatePagedJSError(error.message);
-  }
 }
 
 function testOverflowHandling() {
-  debugLog('Testing overflow handling...', 'info');
-  
-  // Test the addOverflowNodes function with null parameters
   try {
     // This should trigger our defensive null checks
     if (window.Paged && window.Paged.Layout) {
       const layout = new window.Paged.Layout();
       if (layout.addOverflowNodes) {
         layout.addOverflowNodes(null, null);
-        debugLog('Overflow handling test completed - null checks working', 'success');
-      } else {
-        debugLog('addOverflowNodes method not found', 'warn');
       }
-    } else {
-      debugLog('PagedJS Layout not available for testing', 'warn');
     }
-  } catch (error) {
-    debugLog(`Overflow handling test failed: ${error.message}`, 'error');
-  }
+  } catch (error) {}
 }
 
 function analyzeContentStructure() {
-  debugLog('=== Analyzing Content Structure ===', 'info');
-  
   const bookContent = document.querySelector("#book-content");
   if (!bookContent || !bookContent.content) {
-    debugLog('Book content not found', 'error');
+    debugLog('Book content not found', 'warn');
     return;
   }
-  
   const content = bookContent.content.cloneNode(true);
-  
-  // Count different element types
   const sections = content.querySelectorAll('section');
-  const divs = content.querySelectorAll('div');
   const paragraphs = content.querySelectorAll('p');
   const headers = content.querySelectorAll('h1, h2, h3, h4, h5, h6');
-  const spans = content.querySelectorAll('span');
-  const emptySpans = content.querySelectorAll('span:empty');
-  const anchors = content.querySelectorAll('a');
-  
-  debugLog(`Content analysis:`, 'info');
-  debugLog(`- Sections: ${sections.length}`, 'info');
-  debugLog(`- Divs: ${divs.length}`, 'info');
-  debugLog(`- Paragraphs: ${paragraphs.length}`, 'info');
-  debugLog(`- Headers: ${headers.length}`, 'info');
-  debugLog(`- Spans: ${spans.length}`, 'info');
-  debugLog(`- Empty spans: ${emptySpans.length}`, 'info');
-  debugLog(`- Anchors: ${anchors.length}`, 'info');
-  
-  // Check for problematic patterns
-  const emptyParagraphs = content.querySelectorAll('p:empty');
-  const deeplyNested = content.querySelectorAll('section section section section');
-  
-  if (emptyParagraphs.length > 0) {
-    debugLog(`⚠️ Found ${emptyParagraphs.length} empty paragraphs`, 'warn');
-  }
-  
-  if (deeplyNested.length > 0) {
-    debugLog(`⚠️ Found ${deeplyNested.length} deeply nested sections`, 'warn');
-  }
-  
-  // Look for the specific content markers
-  const textContent = content.textContent || '';
-  const wordCount = textContent.split(/\s+/).filter(word => word.length > 0).length;
-  debugLog(`Total word count: ${wordCount}`, 'info');
-  
-  // Check for specific problematic elements that might cause PagedJS to stop
-  const problematicSelectors = [
-    'p:has(span:empty[id])',
-    'section:empty',
-    'div:empty',
-    '*[style*="display: none"]'
-  ];
-  
-  problematicSelectors.forEach(selector => {
-    try {
-      const elements = content.querySelectorAll(selector);
-      if (elements.length > 0) {
-        debugLog(`⚠️ Found ${elements.length} elements matching: ${selector}`, 'warn');
-      }
-    } catch (e) {
-      // Some selectors might not be supported
-    }
-  });
-  
-  debugLog('=== End Content Analysis ===', 'info');
+  const wordCount = (content.textContent || '').split(/\s+/).filter(w => w.length > 0).length;
+  debugLog(`Content: ${sections.length} sections, ${paragraphs.length} paragraphs, ${headers.length} headers, ${wordCount} words`, 'info');
 }
 
-// Test function for debug system - can be called from browser console
 function testDebugSystem() {
-  console.log('=== Testing debug system ===');
-  
-  // Test if debug console exists
-  const debugConsoleElement = document.querySelector("#debug-console");
-  console.log('Debug console element:', debugConsoleElement);
-  
-  // Test debug logging
-  debugLog('Test message from testDebugSystem()', 'info');
-  debugLog('Test warning message', 'warn');
-  debugLog('Test error message', 'error');
-  debugLog('Test success message', 'success');
-  
-  // Test status updates
   updatePagedJSStatus('Testing');
   updatePagedJSPages(42);
-  updatePagedJSError('Test error message');
-  
-  // Test button functionality
-  const buttons = {
-    clear: document.querySelector("#debug-clear-btn"),
-    export: document.querySelector("#debug-export-btn"),
-    reinit: document.querySelector("#debug-reinit-btn"),
-    testOverflow: document.querySelector("#debug-test-overflow-btn"),
-    analyzeContent: document.querySelector("#debug-analyze-content-btn")
-  };
-  
-  console.log('Button elements found:', buttons);
-  
-  // Test if buttons have event listeners
-  Object.entries(buttons).forEach(([name, btn]) => {
-    if (btn) {
-      console.log(`Button ${name}: found, click to test functionality`);
-    } else {
-      console.log(`Button ${name}: NOT FOUND`);
-    }
-  });
-  
-  console.log('=== Debug system test completed ===');
-  return buttons;
+  return { debugConsole, clear: document.querySelector("#debug-clear-btn"), copy: document.querySelector("#debug-copy-btn") };
 }
 
 // Make it globally available

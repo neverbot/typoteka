@@ -5,6 +5,9 @@ function createToc(config) {
   const avoidClasses = config.avoidClasses || [];
 
   let tocElementDiv = content.querySelector(tocElement);
+  if (!tocElementDiv) {
+    return; // No TOC container in this document (e.g. different style or content without #contents)
+  }
   let tocUl = document.createElement("ul");
   tocUl.id = "list-toc-generated";
   tocElementDiv.appendChild(tocUl);
@@ -56,17 +59,18 @@ function createToc(config) {
 
     let tocNewLi = document.createElement("li");
 
-    // Add class for the hierarcy of toc
+    // Add class for the hierarchy of toc
     tocNewLi.classList.add("toc-element");
     tocNewLi.classList.add(
       "toc-element-level-" + tocElement.dataset.titleLevel
     );
 
-    // Keep class of title elements
+    // Keep class of title elements (except chapter – would force one TOC entry per page)
     let classTocElement = tocElement.classList;
     for (var n = 0; n < classTocElement.length; n++) {
-      if (classTocElement[n] != "title-element") {
-        tocNewLi.classList.add(classTocElement[n]);
+      var cls = classTocElement[n];
+      if (cls !== "title-element" && cls !== "chapter") {
+        tocNewLi.classList.add(cls);
       }
     }
 
@@ -77,7 +81,7 @@ function createToc(config) {
   }
 }
 
-class handlers extends Paged.Handler {
+class CreateTocHandler extends Paged.Handler {
   constructor(chunker, polisher, caller) {
     super(chunker, polisher, caller);
   }
@@ -92,8 +96,9 @@ class handlers extends Paged.Handler {
         tocElement.removeChild(tocElement.firstChild);
       }
 
-      // add child with h2 title
+      // add child with h2 title (no-toc so it is not listed in the TOC itself)
       let h2Title = document.createElement("h2");
+      h2Title.className = "no-toc";
       h2Title.innerHTML = "Table of Contents";
       tocElement.appendChild(h2Title);
     }
@@ -107,4 +112,4 @@ class handlers extends Paged.Handler {
   }
 }
 
-Paged.registerHandlers(handlers);
+Paged.registerHandlers(CreateTocHandler);
