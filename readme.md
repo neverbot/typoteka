@@ -80,7 +80,7 @@ To install Pandoc, follow the instructions on the [Pandoc installation page](htt
 
 #### PagedJS
 
-PagedJS is included both built and as a git submodule in the `lib/pagedjs` directory. The built version used in the toolkit is in `viewer/pagedjs/pagedjs.js`. To update it you will need the usual suspects in the JavaScript ecosystem: `node` and `npm`. Probably the easiest way to install them is using [nvm](https://github.com/nvm-sh/nvm), which allows you to use different versions of Node.js and npm easily, although maybe both are already installed in your system.
+PagedJS is included both built and as a git submodule in the `lib/pagedjs` directory. The built version used in the toolkit is in `viewer/pagedjs/paged.js`. To update it you will need the usual suspects in the JavaScript ecosystem: `node` and `npm`. Probably the easiest way to install them is using [nvm](https://github.com/nvm-sh/nvm), which allows you to use different versions of Node.js and npm easily, although maybe both are already installed in your system.
 
 Once you have both tools available, if you want to update the PagedJS library, you can do so by running:
 
@@ -109,12 +109,13 @@ lib/                   # External dependencies
   └── pagedjs/         # PagedJS library (git submodule)
 
 styles/                # Style templates
-  └── example/         # Example style
+  ├── example/         # Minimal example style
+  └── novel/           # Full novel style
       ├── styles.css   # Main CSS styles
       ├── fonts/       # Font files
       └── fixes/       # Style-specific fixes
           ├── pandoc/  # Pandoc Lua filters
-          └── pagedjs/ # PagedJS javascript handlers
+          └── pagedjs/ # PagedJS handlers
 
 template/              # Template to insert user content in
   └── template.html    # Main HTML template
